@@ -1,11 +1,12 @@
+#IMPORTANDO BIBLIOTECA datetime PARA INCLUIR A INFORMAÇÃO NO EXTRATO
 from datetime import datetime
 
 #VARIÁVEIS E CONSTANTES
 saldo = 0
-limite = 500
 extrato = ""
 numero_saques = 0
-LIMITE_SAQUES = 3
+LIMITE_QTD_SAQUES = 3
+LIMITE_VALOR_POR_SAQUE = 500
 
 #MENSAGEM INICIAL AO COMPILAR O PROGRAMA
 print("""
@@ -28,8 +29,9 @@ def menu(const_limite_saques, var_numero_saques):
 
 #FLUXO DE REPETIÇÃO ATÉ O USUÁRIO DIGITAR O NÚMERO 0
 while True:    
-    opcao = input(menu(LIMITE_SAQUES, numero_saques))
+    opcao = input(menu(LIMITE_QTD_SAQUES, numero_saques))
 
+    #SELECIONOU DEPOSITAR
     if opcao == "1":
         valor = float(input("Informe o valor do depósito: "))
 
@@ -42,8 +44,9 @@ while True:
         else:
             print("Operação falhou! O valor informado é inválido.")
 
+    #SELECIONOU SAQUE
     elif opcao == "2":
-        excedeu_saques = LIMITE_SAQUES - numero_saques
+        excedeu_saques = LIMITE_QTD_SAQUES - numero_saques
         
         if excedeu_saques == 0:
             print("Operação falhou! Número máximo de saques excedido.")
@@ -53,13 +56,13 @@ while True:
 
         excedeu_saldo = valor > saldo
 
-        excedeu_limite = valor > limite
+        excedeu_limite = valor > LIMITE_VALOR_POR_SAQUE
 
         if excedeu_saldo:
             print("Operação falhou! Você não tem saldo suficiente.")
 
         elif excedeu_limite:
-            print("Operação falhou! O valor do saque excede o limite.")
+            print(f"Operação falhou! O valor do saque excede o limite. (Limite para saque é R$ {LIMITE_VALOR_POR_SAQUE:.2f})")
 
         elif valor > 0:
             saldo -= valor
@@ -71,15 +74,18 @@ while True:
         else:
             print("Operação falhou! O valor informado é inválido.")
 
+    #SELECIONOU EXTRATO
     elif opcao == "3":
         print("\n================ EXTRATO ================")
         print("Não foram realizadas movimentações." if not extrato else extrato)
         print(f"\nSaldo: R$ {saldo:.2f}")
         print("=========================================")
 
+    #SELECIONOU SAIR
     elif opcao == "0":
         print("\nObrigado por usar o Banco Digital!")
         break
 
+    #SELEÇÃO INVÁLIDA
     else:
         print("Operação inválida, por favor selecione novamente a operação desejada.")
